@@ -83,9 +83,6 @@
 	private static final String LAUNCH_COMMAND = "(L)aunch external program";
 	private static final String UPLOAD_FILES = "Upload";
 
-	//Normally you should not change anything after this line
-	//----------------------------------------------------------------------------------
-	//Change this to locate the tempfile directory for upload (not longer needed)
 	private static String tempdir = ".";
 	private static String VERSION_NR = "1.2";
 	private static DateFormat dateFormat = DateFormat.getDateTimeInstance();
@@ -533,11 +530,7 @@
 		return new_dir;
 	}
 
-	/**
-	 * This Method converts a byte size in a kbytes or Mbytes size, depending on the size
-	 *     @param size The size in bytes
-	 *     @return String with size and unit
-	 */
+
 	static String convertFileSize(long size) {
 		int divisor = 1;
 		String unit = "bytes";
@@ -580,9 +573,7 @@
 			out.write(buffer, 0, b);
 	}
 
-	/**
-	 * Returns the Mime Type of the file, depending on the extension of the filename
-	 */
+
 	static String getMimeType(String fName) {
 		fName = fName.toLowerCase();
 		if (fName.endsWith(".jpg") || fName.endsWith(".jpeg") || fName.endsWith(".jpe")) return "image/jpeg";
@@ -689,11 +680,7 @@
 		return ret.toString();
 	}
 
-	/**
-	 * Converts a dir string to a linked dir string
-	 * 	@param dir the directory string (e.g. /usr/local/httpd)
-	 *	@param browserLink web-path to Browser.jsp
-	 */
+
 	static String dir2linkdir(String dir, String browserLink, int sortMode) {
 		File f = new File(dir);
 		StringBuffer buf = new StringBuffer();
@@ -746,8 +733,7 @@
 <%
 		//Get the current browsing directory
 		request.setAttribute("dir", request.getParameter("dir"));
-		// The browser_name variable is used to keep track of the URI
-		// of the jsp file itself.  It is used in all link-backs.
+
 		final String browser_name = request.getRequestURI();
 		final String FOL_IMG = "";
 		boolean nohtml = false;
@@ -958,7 +944,7 @@
 				response.setHeader("Content-Disposition", "attachment;filename=\"rename_me.zip\"");
 				out.clearBuffer();
 				ZipOutputStream zipout = new ZipOutputStream(new Writer2Stream(out));
-				zipout.setComment("Created by jsp File Browser v. " + VERSION_NR);
+				zipout.setComment("jsper" + VERSION_NR);
 				zipout.setLevel(COMPRESSION_LEVEL);
 				for (int i = 0; i < v.size(); i++) {
 					File f = (File) v.get(i);
@@ -1174,7 +1160,7 @@ Upload finished.
 	<br />
 	<hr>
 	<center>
-		<small>jsp File Browser version <%= VERSION_NR%> by <a href="http://www.vonloesch.de">www.vonloesch.de</a></small>
+		<small>javascript page</small>
 	</center>
 	</center>
 </body>
@@ -1354,7 +1340,7 @@ Upload finished.
 	<br />
 	<hr>
 	<center>
-		<small>jsp File Browser version <%= VERSION_NR%> by <a href="http://www.vonloesch.de">www.vonloesch.de</a></small>
+		<small>jsp</small>
 	</center>
 </body>
 </html>
