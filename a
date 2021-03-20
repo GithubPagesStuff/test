@@ -1,0 +1,92 @@
+function addTouched(prt)
+	if prt:FindFirstChildOfClass("ClickDetector") == nil then
+		local p1 = Instance.new("ClickDetector", prt)
+		return p1
+	else
+		local p1 = prt:FindFirstChildOfClass("ClickDetector")
+		return p1
+	end
+end
+function registerElevator(ElevatorFolder)
+	local function rOpenDoor(elevatorModel)
+		elevatorModel.Door1.Transparency=1
+		elevatorModel.Door1.CanCollide=false
+		elevatorModel.Door2.Transparency=1
+		elevatorModel.Door2.CanCollide=false
+	end
+	local function rCloseDoor(elevatorModel)
+		elevatorModel.Door1.Transparency=0
+		elevatorModel.Door1.CanCollide=true
+		elevatorModel.Door2.Transparency=0
+		elevatorModel.Door2.CanCollide=true
+	end
+	local M1 = ElevatorFolder.M1.Value
+	local M2 = ElevatorFolder.M2.Value
+	local btnPressed = ""
+	local CFloor = 1
+	local A1 = M1.ElevatorButtonDoor.Button1;
+	local A2 = M1.ElevatorButtonDoor.Button2;
+	local B1 = M2.ElevatorButtonDoor.Button1;
+	local B2 = M2.ElevatorButtonDoor.Button2;
+	local function teleport(Mod1, Mod2)
+		local tele;
+		local dv;
+		if CFloor == 1 then
+			tele = M1.tele
+			dv = M2.tele.Position-M1.tele.Position
+			CFloor = 2
+		else
+			tele = M2.tele
+			dv = M1.tele.Position-M2.tele.Position
+			CFloor = 1
+		end
+		tele.Touched:Connect(function()
+			
+		end)
+		for i,v in pairs(tele:GetTouchingParts()) do
+			--print(v)
+			if v.Parent:IsA("Model") and not v:IsDescendantOf(tele.Parent) then
+				v.Parent:SetPrimaryPartCFrame(v.Parent:GetPrimaryPartCFrame()+dv)
+			end
+		end
+		if CFloor == 1 then
+			rOpenDoor(Mod1)			rOpenDoor(Mod2)
+
+		else
+			rOpenDoor(Mod1)			rOpenDoor(Mod2)
+		end
+	end
+	local function openDoor(elevatorModel, CF)
+		--do something
+		print(CF)
+		if CFloor == CF then
+			if (elevatorModel.Door1.Transparency == 0) then
+			rOpenDoor(elevatorModel)
+			else
+				rCloseDoor(elevatorModel)
+			end
+		else
+			rCloseDoor(elevatorModel)
+			if CFloor == 1 then
+				teleport(M1.ElevatorButtonDoor, M2.ElevatorButtonDoor)
+			else
+				teleport(M2.ElevatorButtonDoor, M1.ElevatorButtonDoor)
+			end
+		end
+	end
+	
+	addTouched(A1).MouseClick:Connect(function()
+		openDoor(M1.ElevatorButtonDoor, 1)
+	end)
+	addTouched(B1).MouseClick:Connect(function()
+		openDoor(M2.ElevatorButtonDoor, 2)
+	end)
+	addTouched(A2).MouseClick:Connect(function()
+		openDoor(M1.ElevatorButtonDoor, 2)
+	end)
+	addTouched(B2).MouseClick:Connect(function()
+		openDoor(M2.ElevatorButtonDoor, 1)
+	end)
+
+end
+registerElevator(workspace.Elevator)
